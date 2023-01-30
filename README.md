@@ -1,1 +1,20 @@
 # django-with-firebase
+
+## Ready .env file
+
+.env content is
+```
+# django cofig
+SECRET_KEY=''
+DEBUG=''
+
+# firebase config
+FIREBASE_TYPE=""
+FIREBASE_PROJECT_ID=""
+FIREBASE_PRIVATE_KEY_ID=""
+FIREBASE_PRIVATE_KEY=""
+FIREBASE_AUTH_URI=""
+FIREBASE_CLIENT_ID=""
+FIREBASE_TOKEN_URI=""
+FIREBASE_AUTH_PROVIDER=""
+FIREBASE_CLIENT_CERT_URL=""

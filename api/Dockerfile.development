@@ -1,0 +1,18 @@
+FROM python:3.10.0
+
+# pycファイルを書き込まないようにする
+ENV PYTHONDONTWRITEBYTECODE 1
+# stdoutとstderrをバッファリングしないようにする
+ENV PYTHONUNBUFFERED 1
+
+RUN apt-get update && apt-get install -y
+
+WORKDIR /api
+
+ADD requirements.txt /api/
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+ADD . /api/
+
+CMD python manage.py runserver 0.0.0.0:8000
