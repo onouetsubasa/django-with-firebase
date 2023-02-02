@@ -15,6 +15,7 @@ import os
 import json
 import firebase_admin
 from firebase_admin import credentials
+from firebase import FirebaseAuthentication
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,6 +46,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # app
+    'account',
+    # third party
+    'corsheaders',
+    'rest_framework',
+    'firebase_admin',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +65,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'confing.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'config.firebase.FirebaseAuthentication'
+    ]
+}
 
 TEMPLATES = [
     {

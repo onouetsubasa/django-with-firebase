@@ -1,23 +1,46 @@
-import firebase_admin
-from firebase_admin import credentials
 import json
 import os
 
+from account.models import Account
 
-firebase_info = {
-    "type": "service_account",
-    'apiKey': os.environ.get('FIREBASE_API_KEY'),
-    'authDomain': os.environ.get('FIREBASE_AUTH_INFO'),
-    'projectId': os.environ.get('FIREBASE_PROJECT_ID'),
-    'storageBucket': os.environ.get('FIREBASE_STORAGE_BUCKET'),
-    'messagingSenderId': os.environ.get('FIREBASE_MESSAGE_SENDER_ID'),
-    'appId': os.environ.get('FIREBASE_APP_ID'),
-    'measurementId': os.environ.get('FIREBASE_MEASUREMENT_ID')
-}
+from rest_framework import authentication, exceptions
 
-firebase_json = json.dumps(firebase_info, ensure_ascii=False, indent=2)
+import firebase_admin as admin
+import firebase_admin.auth as auth
 
-cred = credentials.Certificate(firebase_json)
-firebase_admin.initialize_app(cred)
 
+class FirebaseAuthentication(authentication.BaseAuthentication):
+    def authenticate(self, request):
+        token = request.headers.get('Authorization')
+
+        if not token:
+            return None
+
+        deceded_token = None
+        try:
+            deceded_token = auth.verify_id_token(token)
+        except Exception as e:
+            raise PermissionError("Invalid Token")
+
+        if not token or not deceded_token:
+            return None
+
+        try:
+            uid = deceded_token.get('uid')
+            user_profile = auth.get_user(uid)
+            provider_id = user_profile.provider_id
+            email = user_profile.email
+
+            # TODO: (get account)
+            account = Account.objects.get(
+                uid=uid,
+                provider_id=provider_id
+            )
+            return account
+
+        except Account.DoesNotExist:
+            # TODO: (create account):
+            pass
+        except Exception:
+            return None
 
