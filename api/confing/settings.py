@@ -15,7 +15,6 @@ import os
 import json
 import firebase_admin
 from firebase_admin import credentials
-from firebase import FirebaseAuthentication
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -35,6 +34,8 @@ if DEBUG:
     ]
 else:
     ALLOWED_HOSTS = []
+
+
 
 
 # Application definition
@@ -66,9 +67,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'confing.urls'
 
+AUTH_USER_MODEL = 'account.Account'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'config.firebase.FirebaseAuthentication'
+        'firebase.FirebaseAuthentication.authenticate'
     ]
 }
 
