@@ -21,3 +21,14 @@ services:
       - 8000:8000
     depends_on:
       - db
+  web:
+    build:
+      context: ./web
+    ports:
+      - 3000:3000
+    volumes:
+      - ./web/:/app/
+    stdin_open: true
+    tty: true
+    depends_on:
+      - api
