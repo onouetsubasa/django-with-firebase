@@ -1,20 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from confing.base_model import BaseModel
 
-'''
+
+class Account(AbstractUser):
+    '''
 uidとprovider_idの複合ユニークにしている。
 例えば、
 1. ユーザーAがGoogleでログイン
 2. ユーザーBがFacebookでログイン
 このとき1,2は区別するという認識の実装
 '''
-class Account(AbstractUser):
+
     id = models.BigAutoField(primary_key=True, unique=True, editable=False)
     username = models.CharField('username', max_length=150, unique=True)
     email = models.EmailField('email address', null=True, default=None)
     # firebaseで渡されるuid
-    uid = models.CharField('uid', max_length=191, unique=True, null=True)
+    uid = models.CharField('uid', max_length=191, null=True)
     # ソーシャルログインに使用したプロバイダ名
     provider_id = models.CharField('provider_id', max_length=50)
     # firebaseでanonymousかどうか
@@ -23,9 +24,6 @@ class Account(AbstractUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
-
-    def __str__(self):
-        return self.username
 
     class Meta:
         constraints = [
@@ -38,6 +36,5 @@ class Account(AbstractUser):
             )
         ]
 
-
-
-
+    def __str__(self):
+        return self.username

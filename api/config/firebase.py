@@ -1,11 +1,5 @@
-import json
-import os
-
 from account.models import Account
-
-from rest_framework import authentication, exceptions
-
-import firebase_admin as admin
+from rest_framework import authentication
 import firebase_admin.auth as auth
 
 
@@ -19,7 +13,7 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
         deceded_token = None
         try:
             deceded_token = auth.verify_id_token(token)
-        except Exception as e:
+        except Exception:
             raise PermissionError("Invalid Token")
 
         if not token or not deceded_token:
@@ -40,7 +34,7 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
 
         except Account.DoesNotExist:
             # TODO: (create account):
-            pass
+            print('account none')
+            return None
         except Exception:
             return None
-
